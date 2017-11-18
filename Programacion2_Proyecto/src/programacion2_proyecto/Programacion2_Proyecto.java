@@ -18,9 +18,9 @@ import javax.swing.JPanel;
  *
  * @author JorgeLuis
  */
-public class Programacion2_Proyecto extends JFrame{
+public class Programacion2_Proyecto extends JFrame {
 
-   static Cuadro[][] paneles;
+    static Cuadro[][] paneles;
     static Jugador white;
     static Jugador black;
     static Jugador enTurno;
@@ -29,6 +29,7 @@ public class Programacion2_Proyecto extends JFrame{
     static boolean turno; //P1(white) = true, P2(black) = false
     static Tablero t;
     static Tablero copiaTablero;
+    static JFrame frame;
     static int proceso = 1;/*Etapas: 1) Seleccion de pieza
                                      2) Seleccion de casilla a mover
                                      3) Retorno a seleccion de pieza
@@ -48,8 +49,7 @@ public class Programacion2_Proyecto extends JFrame{
         enTurno = white;
         enEspera = new Jugador();
         enEspera = black;
-        //copiaTablero = copiarTablero(t, copiaTablero);
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setLayout(null);
         JPanel panel = new JPanel();
         habilitacionGUI(frame);
@@ -94,9 +94,7 @@ public class Programacion2_Proyecto extends JFrame{
     public static boolean mismoColor(Cuadro tentativo) {
         for (int x = 0; x < t.getCuadros().length; x++) {
             for (int y = 0; y < t.getCuadros().length; y++) {
-                //System.out.println(x + "    " + y);
                 if (t.getCuadros()[x][y].isSelected()) {
-                    System.out.println("entro");
                     System.out.println(tentativo.getPieza().getColor());
                     System.out.println(t.getCuadros()[x][y].getPieza().getColor());
                     if ((t.getCuadros()[x][y].getPieza().getColor().toString()).equals(tentativo.getPieza().getColor().toString())) {
@@ -105,7 +103,6 @@ public class Programacion2_Proyecto extends JFrame{
                 }
             }
         }
-        System.out.println("false");
         return false;
     }
 
@@ -123,15 +120,12 @@ public class Programacion2_Proyecto extends JFrame{
         return false;
     }
 
-  
-
     public static void cambioCasilla(Cuadro tentativo, int xPos, int yPos, int lim, Tablero t) {
         if (xPos == lim && yPos == lim) {
             if (t.getCuadros()[xPos][yPos].isSelected()) {
 
                 System.out.println(xPos + " ," + yPos);
                 tentativo.setPieza(t.getCuadros()[xPos][yPos].getPieza());
-                //System.out.println(tentativo.getPieza().getClass().getSimpleName());
                 t.getCuadros()[xPos][yPos].setPieza(null);
                 tentativo.setOcupado(true);
                 t.getCuadros()[xPos][yPos].setOcupado(false);
@@ -150,7 +144,6 @@ public class Programacion2_Proyecto extends JFrame{
 
                 System.out.println(xPos + " ," + yPos);
                 tentativo.setPieza(t.getCuadros()[xPos][yPos].getPieza());
-                //System.out.println(tentativo.getPieza().getClass().getSimpleName());
                 t.getCuadros()[xPos][yPos].setPieza(null);
                 tentativo.setOcupado(true);
                 t.getCuadros()[xPos][yPos].setOcupado(false);
@@ -170,7 +163,6 @@ public class Programacion2_Proyecto extends JFrame{
             if (t.getCuadros()[xPos][yPos].isSelected()) {
                 System.out.println(xPos + " ," + yPos);
                 tentativo.setPieza(t.getCuadros()[xPos][yPos].getPieza());
-                //System.out.println(tentativo.getPieza().getClass().getSimpleName());
                 t.getCuadros()[xPos][yPos].setPieza(null);
                 tentativo.setOcupado(true);
                 t.getCuadros()[xPos][yPos].setOcupado(false);
@@ -250,7 +242,7 @@ public class Programacion2_Proyecto extends JFrame{
                             } else if (mismoColor(t.getCuadros()[xx][yy])) {
                                 System.out.println("mismo color");
 
-                                if (/*selected.equals(t.getCuadros()[xx][yy]*/mismaCasilla(t.getCuadros()[xx][yy])) {
+                                if (mismaCasilla(t.getCuadros()[xx][yy])) {
                                     System.out.println(t.getCuadros()[xx][yy].getxPos() + ", " + t.getCuadros()[xx][yy].getyPos());
                                     System.out.println(selected.getxPos() + ", " + selected.getyPos());
                                     System.out.println("misma casilla");
@@ -269,9 +261,7 @@ public class Programacion2_Proyecto extends JFrame{
                                             && (selected.getPieza().movimientoLegal(t.getCuadros()[xx][yy])
                                             || ((Peon) selected.getPieza()).comer(t.getCuadros()[xx][yy], selected))) {
                                         Proceso(1);
-                                        //cambioCasilla(t.getCuadros()[xx][yy], 0, 0, 7);
                                         cambioCasilla(copiaTablero.getCuadros()[xx][yy], 0, 0, 7, copiaTablero);
-                                        //selected = null;
                                     }
                                 } else if (selected.getPieza().movimientoSinObstaculos(t.getCuadros()[xx][yy], selected, t)
                                         && selected.getPieza().movimientoLegal(t.getCuadros()[xx][yy])) {
@@ -290,6 +280,7 @@ public class Programacion2_Proyecto extends JFrame{
                             }
                         }
                         System.out.println(proceso);
+                        finDeJuego();
                     }
 
                     @Override
@@ -330,7 +321,7 @@ public class Programacion2_Proyecto extends JFrame{
                         t.getCuadros()[xx][yy].exit(xx, yy, t);
                     }
                 });
-                
+
             }
         }
 
@@ -553,12 +544,99 @@ public class Programacion2_Proyecto extends JFrame{
         }
     }
 
-    public static void finDeJuego(){
-        for (int x=0 ; x < 8; x++){
-            for (int y=0 ; y < 8; y++){
-                
+    public static void finDeJuego() {
+        boolean white_king = false;
+        boolean black_king = false;
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (t.getCuadros()[x][y].isOcupado()) {
+                    if (t.getCuadros()[x][y].getPieza() instanceof Rey) {
+                        if (t.getCuadros()[x][y].getPieza().getColor().equals(Color.BLACK)) {
+                            black_king = true;
+                        } else if (t.getCuadros()[x][y].getPieza().getColor().equals(Color.WHITE)) {
+                            white_king = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (!black_king) {
+            frame.dispose();
+            JOptionPane.showMessageDialog(null, "Felicidades Jugador 1, has ganado la partida!");
+            String resp = JOptionPane.showInputDialog("Desea volver a jugar?");
+            if (resp == "s") {
+                copiaTablero = new Tablero();
+                paneles = new Cuadro[8][8];
+                selected = new Cuadro();
+                t = new Tablero();
+                turno = true;
+                white = new Jugador("Jugador 1", Color.white);
+                asignarPiezas(white);
+                black = new Jugador("Jugador 2", Color.BLACK);
+                asignarPiezas(black);
+                enTurno = new Jugador();
+                enTurno = white;
+                enEspera = new Jugador();
+                enEspera = black;
+                frame = new JFrame();
+                frame.setLayout(null);
+                JPanel panel = new JPanel();
+                habilitacionGUI(frame);
+                frame.add(panel);
+                frame.setSize(580, 600);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                for (int x = 0; x < 8; x++) {
+                    for (int y = 0; y < 8; y++) {
+                        if (t.getCuadros()[x][y].getColor().equals(Color.DARK_GRAY)) {
+                            System.out.print("x" + "    ");
+                        } else {
+                            System.out.print(" " + "    ");
+                        }
+                    }
+                    System.out.println("");
+                }
+            }
+        } else if (!white_king) {
+            frame.dispose();
+            JOptionPane.showMessageDialog(null, "Felecididades jugador 2, has ganado la partida!");
+            String resp = JOptionPane.showInputDialog("Desea volver a jugar?");
+            if (resp == "s") {
+                copiaTablero = new Tablero();
+                paneles = new Cuadro[8][8];
+                selected = new Cuadro();
+                t = new Tablero();
+                turno = true;
+                white = new Jugador("Jugador 1", Color.white);
+                asignarPiezas(white);
+                black = new Jugador("Jugador 2", Color.BLACK);
+                asignarPiezas(black);
+                enTurno = new Jugador();
+                enTurno = white;
+                enEspera = new Jugador();
+                enEspera = black;
+                frame = new JFrame();
+                frame.setLayout(null);
+                JPanel panel = new JPanel();
+                habilitacionGUI(frame);
+                frame.add(panel);
+                frame.setSize(580, 600);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                for (int x = 0; x < 8; x++) {
+                    for (int y = 0; y < 8; y++) {
+                        if (t.getCuadros()[x][y].getColor().equals(Color.DARK_GRAY)) {
+                            System.out.print("x" + "    ");
+                        } else {
+                            System.out.print(" " + "    ");
+                        }
+                    }
+                    System.out.println("");
+                }
             }
         }
     }
-    
+
 }
