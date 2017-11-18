@@ -349,79 +349,8 @@ public class Programacion2_Proyecto extends JFrame {
         return false;
     }
 
-    public static void restaurarOriginal() {
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                t.getCuadros()[x][y] = copiarCuadro(copiaTablero.getCuadros()[x][y]);
-            }
-        }
-    }
 
-    public static Cuadro copiarCuadro(Cuadro cuadro) {
-        Cuadro nuevo = new Cuadro(cuadro.getColor(), cuadro.getxPos(), cuadro.getyPos());
-        if (cuadro.isOcupado()) {
-            if (cuadro.getPieza() instanceof Peon) {
-                nuevo.setPieza(new Peon());
-            } else if (cuadro.getPieza() instanceof Rey) {
-                nuevo.setPieza(new Rey());
-            } else if (cuadro.getPieza() instanceof Reina) {
-                nuevo.setPieza(new Reina());
-            } else if (cuadro.getPieza() instanceof Alfil) {
-                nuevo.setPieza(new Alfil());
-            } else if (cuadro.getPieza() instanceof Torre) {
-                nuevo.setPieza(new Torre());
-            } else if (cuadro.getPieza() instanceof Caballo) {
-                nuevo.setPieza(new Caballo());
-            }
-            nuevo.getPieza().setColor(cuadro.getPieza().getColor());
-            nuevo.getPieza().setMovido(cuadro.getPieza().isMovido());
-            nuevo.getPieza().setCuadro(nuevo);
-            nuevo.getPieza().setTablero(t);
-            nuevo.getLabel().setIcon(new ImageIcon(direccionDeIcono(nuevo.getPieza())));
-            nuevo.setOcupado(true);
-        } else {
-            nuevo.setOcupado(false);
-        }
-        nuevo.setSelected(cuadro.isSelected());
-        return nuevo;
-    }
-
-    public static void copiaMatriz() {
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                copiaTablero.getCuadros()[x][y] = copiaCuadro(t.getCuadros()[x][y]);
-            }
-        }
-    }
-
-    public static Cuadro copiaCuadro(Cuadro cuadro) {
-        Cuadro nuevo = new Cuadro(cuadro.getColor(), cuadro.getxPos(), cuadro.getyPos());
-        if (cuadro.isOcupado()) {
-            if (cuadro.getPieza() instanceof Peon) {
-                nuevo.setPieza(new Peon());
-            } else if (cuadro.getPieza() instanceof Rey) {
-                nuevo.setPieza(new Rey());
-            } else if (cuadro.getPieza() instanceof Reina) {
-                nuevo.setPieza(new Reina());
-            } else if (cuadro.getPieza() instanceof Alfil) {
-                nuevo.setPieza(new Alfil());
-            } else if (cuadro.getPieza() instanceof Torre) {
-                nuevo.setPieza(new Torre());
-            } else if (cuadro.getPieza() instanceof Caballo) {
-                nuevo.setPieza(new Caballo());
-            }
-            nuevo.getPieza().setColor(cuadro.getPieza().getColor());
-            nuevo.getPieza().setMovido(cuadro.getPieza().isMovido());
-            nuevo.getPieza().setCuadro(nuevo);
-            nuevo.getPieza().setTablero(copiaTablero);
-            nuevo.getLabel().setIcon(new ImageIcon(direccionDeIcono(nuevo.getPieza())));
-            nuevo.setOcupado(true);
-        } else {
-            nuevo.setOcupado(false);
-        }
-        nuevo.setSelected(cuadro.isSelected());
-        return nuevo;
-    }
+    
 
     public static Tablero copiarTablero(Tablero porCopiar, Tablero porTransformar) {
         Tablero copia = new Tablero();
@@ -452,7 +381,7 @@ public class Programacion2_Proyecto extends JFrame {
             nuevo.getPieza().setColor(cuadro.getPieza().getColor());
             nuevo.getPieza().setMovido(cuadro.getPieza().isMovido());
             nuevo.getPieza().setCuadro(nuevo);
-            nuevo.getPieza().setTablero(nuevoTablero);
+            nuevo.getPieza().setTablero(copiaTablero);
             nuevo.getLabel().setIcon(new ImageIcon(direccionDeIcono(nuevo.getPieza())));
             nuevo.setOcupado(true);
         } else {
@@ -462,39 +391,7 @@ public class Programacion2_Proyecto extends JFrame {
         return nuevo;
     }
 
-    public static void pruebaM2() {
-        JFrame f = new JFrame();
-        habilitacionGUI(f);
-        f.setSize(580, 600);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-    }
 
-    public static void actualizarMatriz(int pos_x, int pos_y, int lim) {
-
-        if (pos_x == lim && pos_y == lim) {
-            if (t.getCuadros()[pos_x][pos_y].isOcupado()) {
-                t.getCuadros()[pos_x][pos_y].getLabel().setIcon(
-                        new ImageIcon(direccionDeIcono(t.getCuadros()[pos_x][pos_y].getPieza())));
-                t.getCuadros()[pos_x][pos_y].getLabel().setVisible(true);
-            }
-            return;
-        } else if (pos_y == lim) {
-            if (t.getCuadros()[pos_x][pos_y].isOcupado()) {
-                t.getCuadros()[pos_x][pos_y].getLabel().setIcon(
-                        new ImageIcon(direccionDeIcono(t.getCuadros()[pos_x][pos_y].getPieza())));
-                t.getCuadros()[pos_x][pos_y].getLabel().setVisible(true);
-            }
-            actualizarMatriz(pos_x + 1, 0, lim);
-        } else {
-            if (t.getCuadros()[pos_x][pos_y].isOcupado()) {
-                t.getCuadros()[pos_x][pos_y].getLabel().setIcon(
-                        new ImageIcon(direccionDeIcono(t.getCuadros()[pos_x][pos_y].getPieza())));
-                t.getCuadros()[pos_x][pos_y].getLabel().setVisible(true);
-            }
-            actualizarMatriz(pos_x, pos_y + 1, lim);
-        }
-    }
 
     public static String direccionDeIcono(Pieza pieza) {
         if (pieza instanceof Peon) {
