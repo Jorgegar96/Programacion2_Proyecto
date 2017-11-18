@@ -15,7 +15,6 @@ import java.util.Objects;
 public abstract class Pieza{
 
     private Color color;
-    
     private Tablero tablero;
     private Cuadro cuadro;
     private boolean movido;

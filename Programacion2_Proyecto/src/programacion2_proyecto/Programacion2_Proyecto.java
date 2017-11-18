@@ -214,7 +214,6 @@ public class Programacion2_Proyecto extends JFrame {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (proceso == 1) {
-                            copiaTablero = copiarTablero(t, copiaTablero);
                             if (t.getCuadros()[xx][yy].isOcupado()) {
                                 if (enTurno.getPiezas().contains(t.getCuadros()[xx][yy].getPieza())) {
                                     seleccionDePieza(xx, yy);
@@ -227,11 +226,11 @@ public class Programacion2_Proyecto extends JFrame {
                                 if (selected.getPieza().movimientoSinObstaculos(t.getCuadros()[xx][yy], selected, t)
                                         && selected.getPieza().movimientoLegal(t.getCuadros()[xx][yy])) {
                                     Proceso(1);
+
+                                    copiaTablero = copiarTablero(t, copiaTablero);
                                     cambioCasilla(copiaTablero.getCuadros()[xx][yy], 0, 0, 7, copiaTablero);
                                     if (comprobarJaque()) {
                                         JOptionPane.showMessageDialog(frame, "Su rey está en jaque, haga otro movimiento");
-
-                                        //habilitacionGUI(frame);
                                     } else {
                                         cambioCasilla(t.getCuadros()[xx][yy], 0, 0, 7, t);
                                         selected = null;
@@ -261,11 +260,15 @@ public class Programacion2_Proyecto extends JFrame {
                                             && (selected.getPieza().movimientoLegal(t.getCuadros()[xx][yy])
                                             || ((Peon) selected.getPieza()).comer(t.getCuadros()[xx][yy], selected))) {
                                         Proceso(1);
+
+                                        copiaTablero = copiarTablero(t, copiaTablero);
                                         cambioCasilla(copiaTablero.getCuadros()[xx][yy], 0, 0, 7, copiaTablero);
                                     }
                                 } else if (selected.getPieza().movimientoSinObstaculos(t.getCuadros()[xx][yy], selected, t)
                                         && selected.getPieza().movimientoLegal(t.getCuadros()[xx][yy])) {
                                     Proceso(1);
+
+                                    copiaTablero = copiarTablero(t, copiaTablero);
                                     cambioCasilla(copiaTablero.getCuadros()[xx][yy], 0, 0, 7, copiaTablero);
 
                                 }
@@ -349,9 +352,6 @@ public class Programacion2_Proyecto extends JFrame {
         return false;
     }
 
-
-    
-
     public static Tablero copiarTablero(Tablero porCopiar, Tablero porTransformar) {
         Tablero copia = new Tablero();
         for (int x = 0; x < 8; x++) {
@@ -390,8 +390,6 @@ public class Programacion2_Proyecto extends JFrame {
         nuevo.setSelected(cuadro.isSelected());
         return nuevo;
     }
-
-
 
     public static String direccionDeIcono(Pieza pieza) {
         if (pieza instanceof Peon) {
